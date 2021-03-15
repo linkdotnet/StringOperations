@@ -7,6 +7,7 @@ namespace LinkDotNet.StringOperations.UnitTests
         [Theory]
         [InlineData("Hello", "Hallo", false, "Hllo")]
         [InlineData("HeLlO", "hallo", true, "HLlO")]
+        [InlineData("Hello", "hel", true, "Hel")]
         [InlineData("abc", "cbe", false, "b")]
         [InlineData("", "", false, "")]
         [InlineData("Test", "", false, "")]
@@ -44,6 +45,16 @@ namespace LinkDotNet.StringOperations.UnitTests
             var cost = "ABCDEFGHIKLMN".GetLevenshteinDistance("abcdefghijlkm", abortCost: abortCost);
             
             Assert.Equal(cost, abortCost);
+        }
+
+        [Theory]
+        [InlineData("ThatIsAWord", "Word", false, "Word")]
+        [InlineData("WordLonger", "LongerWord", false, "Longer")]
+        public void CheckLargestSubstring(string one, string two, bool ignoreCase, string expectedSubstring)
+        {
+            var largestCommonSubstring = one.GetLargestCommonSubstring(two, ignoreCase);
+            
+            Assert.Equal(expectedSubstring, largestCommonSubstring);
         }
     }
 }

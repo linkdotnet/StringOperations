@@ -1,7 +1,9 @@
 # StringOperations for C#
 
-This library implements some basic string operations.
+This library implements some basic string algorithm.
 
 ## Currently implemented algorithms
- * Get Common Subsequent
+### Edit-Distances
+ * Largest Common Subsequent
+ * Largest Common Substring
  * Levensthein Distance
