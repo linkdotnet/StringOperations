@@ -2,7 +2,7 @@
 
 namespace LinkDotNet.StringOperations
 {
-    public static class EditDistances
+    public static partial class EditDistances
     {
         public static string GetLargestCommonSubsequence(this string one, string two, bool ignoreCase = false)
         {
