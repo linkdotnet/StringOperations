@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace LinkDotNet.StringOperations.UnitTests
@@ -24,6 +25,13 @@ namespace LinkDotNet.StringOperations.UnitTests
             Assert.Null("string".GetLargestCommonSubsequence(null));
         }
 
+        [Fact]
+        public void ShouldReturnNull_WhenNullValueForLargestCommonSubsequence()
+        {
+            Assert.Null("test".GetLargestCommonSubsequence(null));
+            Assert.Null(((string)null).GetLargestCommonSubsequence("null"));
+        }
+
         [Theory]
         [InlineData("Hallo", "Hello", false, 1)]
         [InlineData("hALLO", "Hello", true, 1)]
@@ -46,6 +54,13 @@ namespace LinkDotNet.StringOperations.UnitTests
             
             Assert.Equal(cost, abortCost);
         }
+        
+        [Fact]
+        public void ShouldThrow_WhenNullValueForLevenshtein()
+        {
+            Assert.Throws<ArgumentNullException>(() => "test".GetLevenshteinDistance(null));
+            Assert.Throws<ArgumentNullException>(() => ((string) null).GetLevenshteinDistance("Test"));
+        }
 
         [Theory]
         [InlineData("ThatIsAWord", "Word", false, "Word")]
@@ -55,6 +70,13 @@ namespace LinkDotNet.StringOperations.UnitTests
             var largestCommonSubstring = one.GetLargestCommonSubstring(two, ignoreCase);
             
             Assert.Equal(expectedSubstring, largestCommonSubstring);
+        }
+        
+        [Fact]
+        public void ShouldReturnNull_WhenNullValueForLargestCommonSubstring()
+        {
+            Assert.Null("test".GetLargestCommonSubstring(null));
+            Assert.Null(((string)null).GetLargestCommonSubstring("null"));
         }
     }
 }
