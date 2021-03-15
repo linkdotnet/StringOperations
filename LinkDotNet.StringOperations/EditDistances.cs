@@ -4,7 +4,7 @@ namespace LinkDotNet.StringOperations
 {
     public static class EditDistances
     {
-        public static string GetLargestCommonSubsequence(string one, string two, bool ignoreCase = false)
+        public static string GetLargestCommonSubsequence(this string one, string two, bool ignoreCase = false)
         {
             if (one == null || two == null)
             {
@@ -21,11 +21,11 @@ namespace LinkDotNet.StringOperations
             
             for (var i = 1; i <= one.Length; i++)
             {
-                for (var j = 1; j <= two.Length; j++)
+                for (var j = i; j <= two.Length; j++)
                 {
                     var characterEqual = ignoreCase
-                        ? char.ToUpperInvariant(one[i]) == char.ToUpperInvariant(two[j])
-                        : one[i] == one[j];
+                        ? char.ToUpperInvariant(one[i - 1]) == char.ToUpperInvariant(two[j - 1])
+                        : one[i - 1] == one[j - 1];
                     if (characterEqual)
                     {
                         lcsMatrix[i, j] = lcsMatrix[i - 1, j - 1] + 1;
