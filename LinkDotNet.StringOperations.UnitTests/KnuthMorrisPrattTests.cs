@@ -44,5 +44,13 @@ namespace LinkDotNet.StringOperations.UnitTests
             
             Assert.Empty(occurences);
         }
+
+        [Fact]
+        public void ShouldReturnIfOccurrenceInText()
+        {
+            var occurrence = "KnuthMorrisPratt".AsSpan().HasPattern("t");
+            
+            Assert.True(occurrence);
+        }
     }
 }
