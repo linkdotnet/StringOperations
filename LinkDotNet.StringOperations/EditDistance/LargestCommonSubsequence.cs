@@ -4,11 +4,6 @@ namespace LinkDotNet.StringOperations
 {
     public static partial class EditDistances
     {
-        public static int GetLargestCommonSubsequenceLength(this string one, string two, bool ignoreCase = false)
-        {
-            return one.GetLargestCommonSubsequence(two, ignoreCase).Length;
-        }
-        
         public static string GetLargestCommonSubsequence(this string one, string two, bool ignoreCase = false)
         {
             if (one == null || two == null)

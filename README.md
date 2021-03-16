@@ -7,3 +7,6 @@ This library implements some basic string algorithm.
  * Largest Common Subsequent
  * Largest Common Substring
  * Levensthein Distance
+
+### Search
+ * Knuth-Morris-Pratt
