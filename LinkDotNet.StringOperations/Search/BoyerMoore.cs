@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace LinkDotNet.StringOperations.Search
 {
@@ -6,14 +7,20 @@ namespace LinkDotNet.StringOperations.Search
     {
         private const int AlphabetSize = 256;
         
-        public static void FindAll(ReadOnlySpan<char> text, ReadOnlySpan<char> word, bool ignoreCase = false)
+        public static IEnumerable<int> FindAll(ReadOnlySpan<char> text, ReadOnlySpan<char> word, bool ignoreCase = false, bool abortOnFirstOccurrence = false)
         {
+            if (text == null || text.IsEmpty || word == null || word.IsEmpty)
+            {
+                return Array.Empty<int>();
+            }
+            
             var wordLength = word.Length;
             var textLength = text.Length;
 
             var badCharacterTable = GetBadCharacterTable(text, ignoreCase);
 
             var shift = 0;
+            var occurrences = new List<int>();
             while (shift <= textLength - wordLength)
             {
                 var index = word.Length - 1;
@@ -22,7 +29,12 @@ namespace LinkDotNet.StringOperations.Search
 
                 if (index < 0)
                 {
-                    Console.WriteLine($"Found at {shift}");
+                    occurrences.Add(shift);
+                    if (abortOnFirstOccurrence)
+                    {
+                        break;
+                    }
+                    
                     shift = ShiftPatternToNextCharacterWithLastOccurrenceOfPattern(text, shift, wordLength, textLength, badCharacterTable, ignoreCase);
                 }
                 else
@@ -30,6 +42,8 @@ namespace LinkDotNet.StringOperations.Search
                     shift = ShiftPatternAfterBadCharacter(text, shift, index, badCharacterTable, ignoreCase);
                 }
             }
+
+            return occurrences;
         }
 
         private static Span<int> GetBadCharacterTable(ReadOnlySpan<char> text, bool ignoreCase)
