@@ -13,7 +13,7 @@ namespace LinkDotNet.StringOperations.UnitTests
             const string text = "That is my text with the word text 3 times. That is why text again";
             const string pattern = "Text";
 
-            var occurences = text.AsSpan().FindPatterns(pattern, true).ToList();
+            var occurences = text.AsSpan().FindAll(pattern, true).ToList();
             
             Assert.Equal(3, occurences.Count);
             Assert.Equal(11, occurences[0]);
@@ -27,7 +27,7 @@ namespace LinkDotNet.StringOperations.UnitTests
             const string text = "That is my text with the word text 3 times. That is why text again";
             const string pattern = "Text";
 
-            var occurences = text.AsSpan().FindPatterns(pattern, true, true).ToList();
+            var occurences = text.AsSpan().FindAll(pattern, true, true).ToList();
             
             Assert.Single(occurences);
             Assert.Equal(11, occurences[0]);
@@ -40,7 +40,7 @@ namespace LinkDotNet.StringOperations.UnitTests
         [InlineData("null", "")]
         public void ShouldReturnEmptyOccurences_WhenGivenNullOrEmpty(string text, string pattern)
         {
-            var occurences = KnuthMorrisPratt.FindPatterns(text, pattern);
+            var occurences = KnuthMorrisPratt.FindAll(text, pattern);
             
             Assert.Empty(occurences);
         }

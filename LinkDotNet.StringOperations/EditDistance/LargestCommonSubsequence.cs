@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LinkDotNet.StringOperations
+namespace LinkDotNet.StringOperations.EditDistance
 {
     public static partial class EditDistances
     {

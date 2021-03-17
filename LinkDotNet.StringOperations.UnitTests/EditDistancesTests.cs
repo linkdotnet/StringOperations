@@ -1,4 +1,5 @@
 using System;
+using LinkDotNet.StringOperations.EditDistance;
 using Xunit;
 
 namespace LinkDotNet.StringOperations.UnitTests

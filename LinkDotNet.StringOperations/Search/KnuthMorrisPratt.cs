@@ -6,10 +6,10 @@ namespace LinkDotNet.StringOperations.Search
 {
     public static class KnuthMorrisPratt
     {
-        public static bool HasPattern(this ReadOnlySpan<char> text, ReadOnlySpan<char> pattern, bool ignoreCase = false) =>
-            FindPatterns(text, pattern, ignoreCase, true).Any();
+        public static bool HasPattern(this ReadOnlySpan<char> text, ReadOnlySpan<char> word, bool ignoreCase = false) =>
+            FindAll(text, word, ignoreCase, true).Any();
         
-        public static IEnumerable<int> FindPatterns(this ReadOnlySpan<char> text, ReadOnlySpan<char> pattern,
+        public static IEnumerable<int> FindAll(this ReadOnlySpan<char> text, ReadOnlySpan<char> pattern,
             bool ignoreCase = false, bool abortOnFirstOccurence = false)
         {
             if (text == null || text.IsEmpty || pattern == null || pattern.IsEmpty)
@@ -58,7 +58,7 @@ namespace LinkDotNet.StringOperations.Search
             return foundOccurrences;
         }
 
-        private static int[] CreateTable(ReadOnlySpan<char> text, bool ignoreCase)
+        private static Span<int> CreateTable(ReadOnlySpan<char> text, bool ignoreCase)
         {
             var table = new int[text.Length];
             table[0] = -1;

@@ -10,3 +10,4 @@ This library implements some basic string algorithm.
 
 ### Search
  * Knuth-Morris-Pratt
+ * Boyer-Moore
