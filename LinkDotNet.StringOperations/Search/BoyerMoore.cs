@@ -7,11 +7,16 @@ namespace LinkDotNet.StringOperations.Search
     {
         private const int AlphabetSize = 256;
         
-        public static IEnumerable<int> FindAll(ReadOnlySpan<char> text, ReadOnlySpan<char> word, bool ignoreCase = false, bool abortOnFirstOccurrence = false)
+        public static IEnumerable<int> FindAll(string text, string word, bool ignoreCase = false, bool abortOnFirstOccurrence = false)
         {
-            if (text == null || text.IsEmpty || word == null || word.IsEmpty)
+            if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(word))
             {
-                return Array.Empty<int>();
+                yield break;
+            }
+
+            if (text.Length < word.Length)
+            {
+                yield break;
             }
             
             var wordLength = word.Length;
@@ -20,7 +25,6 @@ namespace LinkDotNet.StringOperations.Search
             var badCharacterTable = GetBadCharacterTable(text, ignoreCase);
 
             var shift = 0;
-            var occurrences = new List<int>();
             while (shift <= textLength - wordLength)
             {
                 var index = word.Length - 1;
@@ -29,10 +33,10 @@ namespace LinkDotNet.StringOperations.Search
 
                 if (index < 0)
                 {
-                    occurrences.Add(shift);
+                    yield return shift;
                     if (abortOnFirstOccurrence)
                     {
-                        break;
+                        yield break;
                     }
                     
                     shift = ShiftPatternToNextCharacterWithLastOccurrenceOfPattern(text, shift, wordLength, textLength, badCharacterTable, ignoreCase);
@@ -42,14 +46,12 @@ namespace LinkDotNet.StringOperations.Search
                     shift = ShiftPatternAfterBadCharacter(text, shift, index, badCharacterTable, ignoreCase);
                 }
             }
-
-            return occurrences;
         }
 
-        private static Span<int> GetBadCharacterTable(ReadOnlySpan<char> text, bool ignoreCase)
+        private static int[] GetBadCharacterTable(string text, bool ignoreCase)
         {
-            var table = new Span<int>(new int[AlphabetSize]);
-            table.Fill(-1);
+            var table = new int[AlphabetSize];
+            Array.Fill(table, -1);
 
             for (var i = 0; i < text.Length; i++)
             {
@@ -60,13 +62,13 @@ namespace LinkDotNet.StringOperations.Search
             return table;
         }
 
-        private static int ShiftPatternAfterBadCharacter(ReadOnlySpan<char> text, int shift, int index, Span<int> badCharacterTable, bool ignoreCase)
+        private static int ShiftPatternAfterBadCharacter(string text, int shift, int index, int[] badCharacterTable, bool ignoreCase)
         {
             var character = ignoreCase ? char.ToUpperInvariant(text[shift + index]) : text[shift + index];
             return shift + Math.Max(1, index - badCharacterTable[character]);
         }
 
-        private static int ReduceIndexWhileMatchAtShift(ReadOnlySpan<char> text, ReadOnlySpan<char> word, bool ignoreCase, int index, int shift)
+        private static int ReduceIndexWhileMatchAtShift(string text, string word, bool ignoreCase, int index, int shift)
         {
             while (index >= 0 && CharacterEqual(text, word, ignoreCase, shift + index, index))
             {
