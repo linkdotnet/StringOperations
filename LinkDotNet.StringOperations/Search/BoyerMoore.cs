@@ -22,7 +22,7 @@ namespace LinkDotNet.StringOperations.Search
             var wordLength = word.Length;
             var textLength = text.Length;
 
-            var badCharacterTable = GetBadCharacterTable(text, ignoreCase);
+            var badCharacterTable = GetBadCharacterTable(word, ignoreCase);
 
             var shift = 0;
             while (shift <= textLength - wordLength)
@@ -62,12 +62,6 @@ namespace LinkDotNet.StringOperations.Search
             return table;
         }
 
-        private static int ShiftPatternAfterBadCharacter(string text, int shift, int index, int[] badCharacterTable, bool ignoreCase)
-        {
-            var character = ignoreCase ? char.ToUpperInvariant(text[shift + index]) : text[shift + index];
-            return shift + Math.Max(1, index - badCharacterTable[character]);
-        }
-
         private static int ReduceIndexWhileMatchAtShift(string text, string word, bool ignoreCase, int index, int shift)
         {
             while (index >= 0 && CharacterEqual(text, word, ignoreCase, shift + index, index))
@@ -78,16 +72,7 @@ namespace LinkDotNet.StringOperations.Search
             return index;
         }
 
-        private static bool CharacterEqual(ReadOnlySpan<char> text, ReadOnlySpan<char> pattern, bool ignoreCase, int positionInText,
-            int positionInPattern)
-        {
-            var characterEqual = ignoreCase
-                ? char.ToUpperInvariant(text[positionInText]) == char.ToUpperInvariant(pattern[positionInPattern])
-                : text[positionInText] == pattern[positionInPattern];
-            return characterEqual;
-        }
-
-        private static int ShiftPatternToNextCharacterWithLastOccurrenceOfPattern(ReadOnlySpan<char> text, int shift,
+        private static int ShiftPatternToNextCharacterWithLastOccurrenceOfPattern(string text, int shift,
             int wordLength, int textLength, Span<int> badCharacterTable, bool ignoreCase)
         {
             var character = ignoreCase ? char.ToUpperInvariant(text[shift + wordLength]) : text[shift + wordLength];
@@ -95,6 +80,21 @@ namespace LinkDotNet.StringOperations.Search
             return shift + (shift + wordLength < textLength
                 ? wordLength - badCharacterTable[character]
                 : 1);
+        }
+
+        private static int ShiftPatternAfterBadCharacter(string text, int shift, int index, int[] badCharacterTable, bool ignoreCase)
+        {
+            var character = ignoreCase ? char.ToUpperInvariant(text[shift + index]) : text[shift + index];
+            return shift + Math.Max(1, index - badCharacterTable[character]);
+        }
+
+        private static bool CharacterEqual(ReadOnlySpan<char> text, ReadOnlySpan<char> pattern, bool ignoreCase, int positionInText,
+            int positionInPattern)
+        {
+            var characterEqual = ignoreCase
+                ? char.ToUpperInvariant(text[positionInText]) == char.ToUpperInvariant(pattern[positionInPattern])
+                : text[positionInText] == pattern[positionInPattern];
+            return characterEqual;
         }
     }
 }
