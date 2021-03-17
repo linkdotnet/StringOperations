@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,20 +5,24 @@ namespace LinkDotNet.StringOperations.Search
 {
     public static class KnuthMorrisPratt
     {
-        public static bool HasPattern(this ReadOnlySpan<char> text, ReadOnlySpan<char> word, bool ignoreCase = false) =>
+        public static bool HasPattern(string text, string word, bool ignoreCase = false) =>
             FindAll(text, word, ignoreCase, true).Any();
         
-        public static IEnumerable<int> FindAll(this ReadOnlySpan<char> text, ReadOnlySpan<char> pattern,
+        public static IEnumerable<int> FindAll(string text, string pattern,
             bool ignoreCase = false, bool abortOnFirstOccurence = false)
         {
-            if (text == null || text.IsEmpty || pattern == null || pattern.IsEmpty)
+            if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(pattern))
             {
-                return Array.Empty<int>();
+                yield break;
+            }
+
+            if (text.Length < pattern.Length)
+            {
+                yield break;
             }
             
             var positionInText = 0;
             var positionInPattern = 0;
-            var foundOccurrences = new List<int>();
 
             var knuthMorrisPrattTable = CreateTable(text, ignoreCase);
 
@@ -35,12 +38,13 @@ namespace LinkDotNet.StringOperations.Search
                     if (positionInPattern == pattern.Length)
                     {
                         var index = positionInText - positionInPattern;
-                        foundOccurrences.Add(index);
+                        yield return index;
+                        
                         positionInPattern = knuthMorrisPrattTable[positionInPattern];
 
                         if (abortOnFirstOccurence)
                         {
-                            return foundOccurrences;
+                            yield break;
                         }
                     }
                 }
@@ -54,11 +58,9 @@ namespace LinkDotNet.StringOperations.Search
                     }
                 }
             }
-
-            return foundOccurrences;
         }
 
-        private static Span<int> CreateTable(ReadOnlySpan<char> text, bool ignoreCase)
+        private static int[] CreateTable(string text, bool ignoreCase)
         {
             var table = new int[text.Length];
             table[0] = -1;
@@ -89,7 +91,7 @@ namespace LinkDotNet.StringOperations.Search
             return table;
         }
 
-        private static bool CharacterEqual(ReadOnlySpan<char> text, ReadOnlySpan<char> pattern, bool ignoreCase, int positionInText,
+        private static bool CharacterEqual(string text, string pattern, bool ignoreCase, int positionInText,
             int positionInPattern)
         {
             var characterEqual = ignoreCase

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using LinkDotNet.StringOperations.Search;
 using Xunit;
@@ -13,12 +12,12 @@ namespace LinkDotNet.StringOperations.UnitTests
             const string text = "That is my text with the word text 3 times. That is why text again";
             const string pattern = "Text";
 
-            var occurences = text.AsSpan().FindAll(pattern, true).ToList();
+            var occurrences = KnuthMorrisPratt.FindAll(text, pattern, true).ToList();
             
-            Assert.Equal(3, occurences.Count);
-            Assert.Equal(11, occurences[0]);
-            Assert.Equal(30, occurences[1]);
-            Assert.Equal(56, occurences[2]);
+            Assert.Equal(3, occurrences.Count);
+            Assert.Equal(11, occurrences[0]);
+            Assert.Equal(30, occurrences[1]);
+            Assert.Equal(56, occurrences[2]);
         }
         
         [Fact]
@@ -27,10 +26,10 @@ namespace LinkDotNet.StringOperations.UnitTests
             const string text = "That is my text with the word text 3 times. That is why text again";
             const string pattern = "Text";
 
-            var occurences = text.AsSpan().FindAll(pattern, true, true).ToList();
+            var occurrences = KnuthMorrisPratt.FindAll(text, pattern, true, true).ToList();
             
-            Assert.Single(occurences);
-            Assert.Equal(11, occurences[0]);
+            Assert.Single(occurrences);
+            Assert.Equal(11, occurrences[0]);
         }
 
         [Theory]
@@ -38,19 +37,35 @@ namespace LinkDotNet.StringOperations.UnitTests
         [InlineData("null", null)]
         [InlineData("", "null")]
         [InlineData("null", "")]
-        public void ShouldReturnEmptyOccurences_WhenGivenNullOrEmpty(string text, string pattern)
+        public void ShouldReturnEmptyOccurrences_WhenGivenNullOrEmpty(string text, string pattern)
         {
-            var occurences = KnuthMorrisPratt.FindAll(text, pattern);
+            var occurrences = KnuthMorrisPratt.FindAll(text, pattern);
             
-            Assert.Empty(occurences);
+            Assert.Empty(occurrences);
         }
 
         [Fact]
         public void ShouldReturnIfOccurrenceInText()
         {
-            var occurrence = "KnuthMorrisPratt".AsSpan().HasPattern("t");
+            var occurrence = KnuthMorrisPratt.HasPattern("KnuthMorrisPratt", "t");
             
             Assert.True(occurrence);
+        }
+
+        [Fact]
+        public void GivenNoHit_ThenEmptyArray()
+        {
+            var occurrences = KnuthMorrisPratt.FindAll("Word", "Text");
+            
+            Assert.Empty(occurrences);
+        }
+
+        [Fact]
+        public void GivenPatternLongerThanText_EmptyArray()
+        {
+            var hasHit = KnuthMorrisPratt.HasPattern("t", "longer");
+            
+            Assert.False(hasHit);
         }
     }
 }
