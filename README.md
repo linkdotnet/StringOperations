@@ -1,6 +1,7 @@
-# StringOperations for C#
+# String Operations for C#
 
 This library implements some basic string algorithm.
+The implementations are not optimized for performance.
 
 ## Currently implemented algorithms
 ### Edit-Distances
@@ -11,3 +12,6 @@ This library implements some basic string algorithm.
 ### Search
  * Knuth-Morris-Pratt
  * Boyer-Moore
+
+### Data Structure
+ * Trie
