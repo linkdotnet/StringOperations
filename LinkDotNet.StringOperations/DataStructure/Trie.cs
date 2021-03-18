@@ -79,7 +79,7 @@ namespace LinkDotNet.StringOperations.DataStructure
 
             foreach (var character in word)
             {
-                var currentCharacter = _ignoreCase ?  char.ToUpperInvariant(character) : character;
+                var currentCharacter = _ignoreCase ? char.ToUpperInvariant(character) : character;
                 if (children.ContainsKey(currentCharacter))
                 {
                     currentNode = children[currentCharacter];
