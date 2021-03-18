@@ -36,7 +36,7 @@ namespace LinkDotNet.StringOperations.DataStructure
 
         public bool Find(ReadOnlySpan<char> word)
         {
-            if (word == null || word.IsEmpty)
+            if (word.IsEmpty)
             {
                 return false;
             }
@@ -48,7 +48,7 @@ namespace LinkDotNet.StringOperations.DataStructure
 
         public bool StartsWith(ReadOnlySpan<char> word)
         {
-            if (word == null || word.IsEmpty)
+            if (word.IsEmpty)
             {
                 return false;
             }
