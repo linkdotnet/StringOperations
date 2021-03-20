@@ -6,7 +6,7 @@ namespace LinkDotNet.StringOperations.DataStructure
     public class Trie
     {
         private readonly bool _ignoreCase;
-        private readonly Node _root = new Node();
+        private readonly TrieNode _root = new TrieNode();
 
         public Trie() : this(false)
         {
@@ -56,34 +56,34 @@ namespace LinkDotNet.StringOperations.DataStructure
             return FindNode(word) != null;
         }
 
-        private static Node CreateOrGetNode(char currentCharacter, IDictionary<char, Node> children)
+        private static TrieNode CreateOrGetNode(char currentCharacter, IDictionary<char, TrieNode> children)
         {
-            Node node;
+            TrieNode trieNode;
             if (children.ContainsKey(currentCharacter))
             {
-                node = children[currentCharacter];
+                trieNode = children[currentCharacter];
             }
             else
             {
-                node = new Node();
-                children.Add(currentCharacter, node);
+                trieNode = new TrieNode();
+                children.Add(currentCharacter, trieNode);
             }
 
-            return node;
+            return trieNode;
         }
 
-        private Node FindNode(ReadOnlySpan<char> word)
+        private TrieNode FindNode(ReadOnlySpan<char> word)
         {
             var children = _root.Children;
-            Node currentNode = null;
+            TrieNode currentTrieNode = null;
 
             foreach (var character in word)
             {
                 var currentCharacter = _ignoreCase ? char.ToUpperInvariant(character) : character;
                 if (children.ContainsKey(currentCharacter))
                 {
-                    currentNode = children[currentCharacter];
-                    children = currentNode.Children;
+                    currentTrieNode = children[currentCharacter];
+                    children = currentTrieNode.Children;
                 }
                 else
                 {
@@ -91,7 +91,7 @@ namespace LinkDotNet.StringOperations.DataStructure
                 }
             }
 
-            return currentNode;
+            return currentTrieNode;
         }
     }
 }

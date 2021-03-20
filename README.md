@@ -15,3 +15,4 @@ The implementations are not optimized for performance.
 
 ### Data Structure
  * Trie
+ * Rope
