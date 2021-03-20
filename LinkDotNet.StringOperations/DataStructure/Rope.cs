@@ -46,17 +46,8 @@ namespace LinkDotNet.StringOperations.DataStructure
         public static Rope Concat(Rope left, Rope right)
         {
             var rope = new Rope { _root = new RopeNode { Left = left._root, Right = right._root } };
+            rope._root.SetWeight();
             return rope;
-
-            static int RecalculateWeight(RopeNode nodeToRecalculate)
-            {
-                if (nodeToRecalculate.Left != null)
-                {
-                    return RecalculateWeight(nodeToRecalculate.Left);
-                }
-
-                return 0;
-            }
         }
 
         private static RopeNode CreateInternal(ReadOnlySpan<char> text, int leafLength, int leftIndex, int rightIndex)
