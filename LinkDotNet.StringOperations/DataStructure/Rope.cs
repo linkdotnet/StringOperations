@@ -31,22 +31,32 @@ namespace LinkDotNet.StringOperations.DataStructure
 
         public static Rope operator +(Rope left, ReadOnlySpan<char> right)
         {
-            var rightRope = Rope.Create(right);
+            var rightRope = Create(right);
 
             return left + rightRope;
         }
 
         public static Rope operator +(ReadOnlySpan<char> left, Rope right)
         {
-            var leftRope = Rope.Create(left);
+            var leftRope = Create(left);
 
             return leftRope + right;
         }
 
         public static Rope Concat(Rope left, Rope right)
         {
-            // Might need to rebalance
-            return new Rope { _root = new RopeNode { Left = left._root, Right = right._root } };
+            var rope = new Rope { _root = new RopeNode { Left = left._root, Right = right._root } };
+            return rope;
+
+            static int RecalculateWeight(RopeNode nodeToRecalculate)
+            {
+                if (nodeToRecalculate.Left != null)
+                {
+                    return RecalculateWeight(nodeToRecalculate.Left);
+                }
+
+                return 0;
+            }
         }
 
         private static RopeNode CreateInternal(ReadOnlySpan<char> text, int leafLength, int leftIndex, int rightIndex)
@@ -55,17 +65,17 @@ namespace LinkDotNet.StringOperations.DataStructure
 
             if (rightIndex - leftIndex > leafLength)
             {
-                node.Weight = (rightIndex - leftIndex) / 2;
-                var center = (rightIndex + leftIndex) / 2;
+                var center = (rightIndex + leftIndex + 1) / 2;
                 node.Left = CreateInternal(text, leafLength, leftIndex, center);
                 node.Right = CreateInternal(text, leafLength, center + 1, rightIndex);
             }
             else
             {
-                node.Weight = rightIndex - leftIndex;
                 var rightIndexInclusiveUpperBound = rightIndex + 1;
                 node.Fragment = text[leftIndex .. rightIndexInclusiveUpperBound].ToString();
             }
+            
+            node.SetWeight();
             
             return node;
         }

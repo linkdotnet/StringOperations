@@ -1,8 +1,5 @@
-using System;
 using LinkDotNet.StringOperations.DataStructure;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace LinkDotNet.StringOperations.UnitTests
 {
@@ -42,11 +39,12 @@ namespace LinkDotNet.StringOperations.UnitTests
             Assert.Equal("HelloWorld", first.ToString());
             Assert.Equal("HelloWorld", second.ToString());
         }
-        
+
+        [Fact]
         public void ShouldGetIndex()
         {
-            var text = "That is a very nice text";
-            var rope = Rope.Create(text, 5);
+            const string text = "0123456789";
+            var rope = Rope.Create(text, 2);
 
             Assert.Equal(text[5], rope[5]);
         }
