@@ -48,5 +48,17 @@ namespace LinkDotNet.StringOperations.UnitTests
 
             Assert.Equal(text[5], rope[5]);
         }
+
+        [Fact]
+        public void ShouldGetIndexAfterRebalance()
+        {
+            var rope1 = Rope.Create("012");
+            var rope2 = Rope.Create("345");
+            var rope = rope1 + rope2;
+
+            var index = rope[3];
+            
+            Assert.Equal('3', index);
+        }
     }
 }

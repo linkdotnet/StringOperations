@@ -7,6 +7,10 @@ namespace LinkDotNet.StringOperations.DataStructure
     {
         private RopeNode _root;
 
+        private Rope()
+        {
+        }
+
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
