@@ -9,10 +9,19 @@ namespace LinkDotNet.StringOperations.DataStructure
         private Rope _right;
         private string _fragment;
         private int _weight;
-        
+        private bool _hasToRecalculateWeights;
+
         private Rope() {}
         
-        public char this[int index] => GetIndex(this, index);
+        public char this[int index] => GetIndex(index);
+
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+            AppendStrings(this, stringBuilder);
+
+            return stringBuilder.ToString();
+        }
         
         public static Rope operator +(Rope left, Rope right)
         {
@@ -35,17 +44,14 @@ namespace LinkDotNet.StringOperations.DataStructure
 
         public static Rope Concat(Rope left, Rope right)
         {
-            var rope = new Rope {_left = left, _right = right};
-            rope.CalculateAndSetWeight();
+            var rope = new Rope { _left = left, _right = right, _hasToRecalculateWeights = true };
+
             return rope;
         }
 
-        public override string ToString()
+        public void CalculateAndSetWeight()
         {
-            var stringBuilder = new StringBuilder();
-            AppendStrings(this, stringBuilder);
-
-            return stringBuilder.ToString();
+            _weight = _left == null ? _fragment.Length : GetWeightInternal(_left);
         }
 
         public static Rope Create(ReadOnlySpan<char> text, int leafLength = 8)
@@ -83,20 +89,31 @@ namespace LinkDotNet.StringOperations.DataStructure
 
             return node._left != null ? GetWeightInternal(node._left) : node._fragment.Length;
         }
-        
-        private static char GetIndex(Rope node, int index)
+
+        private char GetIndex(int index)
         {
-            if (node._weight <= index && node._right != null)
+            if (_hasToRecalculateWeights)
             {
-                return GetIndex(node._right, index - node._weight);
+                CalculateAndSetWeight();
+                _hasToRecalculateWeights = false;
             }
+            
+            return GetIndexInternal(this, index);
 
-            if (node._left != null)
+            static char GetIndexInternal(Rope node, int index)
             {
-                return GetIndex(node._left, index);
-            }
+                if (node._weight <= index && node._right != null)
+                {
+                    return GetIndexInternal(node._right, index - node._weight);
+                }
 
-            return node._fragment[index];
+                if (node._left != null)
+                {
+                    return GetIndexInternal(node._left, index);
+                }
+
+                return node._fragment[index];
+            }
         }
 
         private static void AppendStrings(Rope node, StringBuilder builder)
@@ -113,11 +130,6 @@ namespace LinkDotNet.StringOperations.DataStructure
 
             AppendStrings(node._left, builder);
             AppendStrings(node._right, builder);
-        }
-        
-        private void CalculateAndSetWeight()
-        {
-            _weight = _left == null ? _fragment.Length : GetWeightInternal(_left);
         }
     } 
 }
