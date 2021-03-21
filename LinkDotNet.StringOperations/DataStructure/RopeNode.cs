@@ -5,9 +5,9 @@ namespace LinkDotNet.StringOperations.DataStructure
         public RopeNode Left { get; set; }
         public RopeNode Right { get; set; }
         public string Fragment { get; set; }
-        public int Weight { get; set; }
+        public int Weight { get; private set; }
 
-        public void SetWeight()
+        public void CalculateAndSetWeight()
         {
             Weight = Left == null ? Fragment.Length : GetWeightInternal(Left);
         }

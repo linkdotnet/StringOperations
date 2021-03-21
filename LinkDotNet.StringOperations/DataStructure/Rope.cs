@@ -50,7 +50,7 @@ namespace LinkDotNet.StringOperations.DataStructure
         public static Rope Concat(Rope left, Rope right)
         {
             var rope = new Rope { _root = new RopeNode { Left = left._root, Right = right._root } };
-            rope._root.SetWeight();
+            rope._root.CalculateAndSetWeight();
             return rope;
         }
 
@@ -70,7 +70,7 @@ namespace LinkDotNet.StringOperations.DataStructure
                 node.Fragment = text[leftIndex .. rightIndexInclusiveUpperBound].ToString();
             }
             
-            node.SetWeight();
+            node.CalculateAndSetWeight();
             
             return node;
         }
