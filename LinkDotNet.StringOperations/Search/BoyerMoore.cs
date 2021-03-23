@@ -75,11 +75,14 @@ namespace LinkDotNet.StringOperations.Search
         private static int ShiftPatternToNextCharacterWithLastOccurrenceOfPattern(string text, int shift,
             int wordLength, int textLength, Span<int> badCharacterTable, bool ignoreCase)
         {
-            var character = ignoreCase ? char.ToUpperInvariant(text[shift + wordLength]) : text[shift + wordLength];
-            
             return shift + (shift + wordLength < textLength
-                ? wordLength - badCharacterTable[character]
+                ? wordLength - badCharacterTable[GetCharacter()]
                 : 1);
+
+            char GetCharacter()
+            {
+                return ignoreCase ? char.ToUpperInvariant(text[shift + wordLength]) : text[shift + wordLength];
+            }
         }
 
         private static int ShiftPatternAfterBadCharacter(string text, int shift, int index, int[] badCharacterTable, bool ignoreCase)

@@ -19,7 +19,18 @@ namespace LinkDotNet.StringOperations.UnitTests
             Assert.Equal(30, occurrences[1]);
             Assert.Equal(56, occurrences[2]);
         }
-        
+
+        [Fact]
+        public void DoNotGoOutOfBounds()
+        {
+            const string text = "The quick brown fox jumps over the lazy dog maybe also a cat a sheep and another dog";
+            const string word = "dog";
+
+            var occurrences = BoyerMoore.FindAll(text, word).ToList();
+
+            Assert.Equal(2, occurrences.Count);
+        }
+
         [Fact]
         public void ShouldAbortOnFirstOccurence()
         {
