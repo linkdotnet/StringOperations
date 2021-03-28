@@ -6,8 +6,9 @@ namespace LinkDotNet.StringOperations.DataStructure
 {
     public class Trie
     {
+        public IDictionary<char, Trie> Children { get; set; } = new Dictionary<char, Trie>();
+        private bool _isLeaf;
         private readonly bool _ignoreCase;
-        private readonly TrieNode _root = new TrieNode();
 
         public Trie() : this(false)
         {
@@ -20,7 +21,7 @@ namespace LinkDotNet.StringOperations.DataStructure
         
         public void Add(ReadOnlySpan<char> word)
         {
-            var current = _root.Children;
+            var current = Children;
             for (var i = 0; i < word.Length; i++)
             {
                 var currentCharacter = _ignoreCase ? char.ToUpperInvariant(word[i]) : word[i];
@@ -30,7 +31,7 @@ namespace LinkDotNet.StringOperations.DataStructure
 
                 if (i == word.Length - 1)
                 {
-                    node.IsLeaf = true;
+                    node._isLeaf = true;
                 }
             }
         }
@@ -44,7 +45,7 @@ namespace LinkDotNet.StringOperations.DataStructure
             
             var node = FindNode(word);
 
-            return node != null && node.IsLeaf;
+            return node != null && node._isLeaf;
         }
 
         public bool StartsWith(ReadOnlySpan<char> word)
@@ -70,7 +71,7 @@ namespace LinkDotNet.StringOperations.DataStructure
                 yield return word;
             }
 
-            static IEnumerable<string> Collect(TrieNode node, List<char> prefix)
+            static IEnumerable<string> Collect(Trie node, List<char> prefix)
             {
                 if (node.Children.Count == 0)
                 {
@@ -89,34 +90,34 @@ namespace LinkDotNet.StringOperations.DataStructure
             }
         }
 
-        private static TrieNode CreateOrGetNode(char currentCharacter, IDictionary<char, TrieNode> children)
+        private static Trie CreateOrGetNode(char currentCharacter, IDictionary<char, Trie> children)
         {
-            TrieNode trieNode;
+            Trie Trie;
             if (children.ContainsKey(currentCharacter))
             {
-                trieNode = children[currentCharacter];
+                Trie = children[currentCharacter];
             }
             else
             {
-                trieNode = new TrieNode();
-                children.Add(currentCharacter, trieNode);
+                Trie = new Trie();
+                children.Add(currentCharacter, Trie);
             }
 
-            return trieNode;
+            return Trie;
         }
 
-        private TrieNode FindNode(ReadOnlySpan<char> word)
+        private Trie FindNode(ReadOnlySpan<char> word)
         {
-            var children = _root.Children;
-            TrieNode currentTrieNode = null;
+            var children = Children;
+            Trie currentTrie = null;
 
             foreach (var character in word)
             {
                 var currentCharacter = _ignoreCase ? char.ToUpperInvariant(character) : character;
                 if (children.ContainsKey(currentCharacter))
                 {
-                    currentTrieNode = children[currentCharacter];
-                    children = currentTrieNode.Children;
+                    currentTrie = children[currentCharacter];
+                    children = currentTrie.Children;
                 }
                 else
                 {
@@ -124,7 +125,7 @@ namespace LinkDotNet.StringOperations.DataStructure
                 }
             }
 
-            return currentTrieNode;
+            return currentTrie;
         }
     }
 }
