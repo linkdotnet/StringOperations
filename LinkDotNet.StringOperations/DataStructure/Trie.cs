@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LinkDotNet.StringOperations.DataStructure
 {
@@ -54,6 +55,38 @@ namespace LinkDotNet.StringOperations.DataStructure
             }
 
             return FindNode(word) != null;
+        }
+
+        public IEnumerable<string> GetWordsWithPrefix(string prefix)
+        {
+            var node = FindNode(prefix);
+            if (node == null)
+            {
+                yield break;
+            }
+
+            foreach (var word in Collect(node, prefix.ToList()))
+            {
+                yield return word;
+            }
+
+            static IEnumerable<string> Collect(TrieNode node, List<char> prefix)
+            {
+                if (node.Children.Count == 0)
+                {
+                    yield return new string(prefix.ToArray());
+                }
+
+                foreach (var child in node.Children)
+                {
+                    prefix.Add(child.Key);
+                    foreach (var t in Collect(child.Value, prefix))
+                    {
+                        yield return t;
+                    }
+                    prefix.RemoveAt(prefix.Count - 1);
+                }
+            }
         }
 
         private static TrieNode CreateOrGetNode(char currentCharacter, IDictionary<char, TrieNode> children)

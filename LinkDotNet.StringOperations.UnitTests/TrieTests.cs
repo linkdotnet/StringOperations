@@ -1,3 +1,4 @@
+using System.Linq;
 using LinkDotNet.StringOperations.DataStructure;
 using Xunit;
 
@@ -64,6 +65,18 @@ namespace LinkDotNet.StringOperations.UnitTests
             var hasHit = trie.StartsWith("def");
 
             Assert.False(hasHit);
+        }
+
+        [Fact]
+        public void ShouldReturnAllWordsWithStartingPrefix()
+        {
+            var trie = new Trie();
+            trie.Add("Hello");
+            trie.Add("Helsinki");
+
+            var hits = trie.GetWordsWithPrefix("Hel").ToList();
+            
+            Assert.Equal(2, hits.Count);
         }
     }
 }
