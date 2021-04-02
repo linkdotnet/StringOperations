@@ -4,18 +4,18 @@ namespace LinkDotNet.StringOperations.EditDistance
 {
     public static partial class EditDistances
     {
-        public static string GetLargestCommonSubsequence(this string one, string two, bool ignoreCase = false)
+        public static string GetLongestCommonSubsequence(this string one, string two, bool ignoreCase = false)
         {
             if (one == null || two == null)
             {
                 return null;
             }
 
-            var lcsMatrix = CreateLargestCommonSubsequenceMatrix(one, two, ignoreCase);
+            var lcsMatrix = CreateLongestCommonSubsequenceMatrix(one, two, ignoreCase);
             return GetLongestCommonSubsequenceBackTrack(lcsMatrix, one, two, one.Length, two.Length, ignoreCase);
         }
 
-        private static int[,] CreateLargestCommonSubsequenceMatrix(string one, string two, bool ignoreCase)
+        private static int[,] CreateLongestCommonSubsequenceMatrix(string one, string two, bool ignoreCase)
         {
             var lcsMatrix = new int[one.Length + 1, two.Length + 1];
             

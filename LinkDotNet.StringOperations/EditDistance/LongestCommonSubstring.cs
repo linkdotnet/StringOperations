@@ -2,14 +2,14 @@ namespace LinkDotNet.StringOperations.EditDistance
 {
     public static partial class EditDistances
     {
-        public static string GetLargestCommonSubstring(this string one, string two, bool ignoreCase = false)
+        public static string GetLongestCommonSubstring(this string one, string two, bool ignoreCase = false)
         {
             if (one == null || two == null)
             {
                 return null;
             }
 
-            var lcsMatrix = CreateLargestCommonSubstringMatrix(one, two, ignoreCase);
+            var lcsMatrix = CreateLongestCommonSubstringMatrix(one, two, ignoreCase);
 
             var length = -1;
             var index = -1;
@@ -28,7 +28,7 @@ namespace LinkDotNet.StringOperations.EditDistance
             return length > 0 ? one.Substring(index, length) : string.Empty;
         }
         
-        private static int[,] CreateLargestCommonSubstringMatrix(string one, string two, bool ignoreCase)
+        private static int[,] CreateLongestCommonSubstringMatrix(string one, string two, bool ignoreCase)
         {
             var lcsMatrix = new int[one.Length + 1, two.Length + 1];
             

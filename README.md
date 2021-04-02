@@ -5,8 +5,8 @@ The implementations are not optimized for performance.
 
 ## Currently implemented algorithms
 ### Edit-Distances
- * Largest Common Subsequent
- * Largest Common Substring
+ * Longest Common Subsequent
+ * Longest Common Substring
  * Levensthein Distance
 
 ### Search

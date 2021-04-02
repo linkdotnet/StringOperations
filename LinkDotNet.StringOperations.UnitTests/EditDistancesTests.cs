@@ -13,24 +13,24 @@ namespace LinkDotNet.StringOperations.UnitTests
         [InlineData("abc", "cbe", false, "b")]
         [InlineData("", "", false, "")]
         [InlineData("Test", "", false, "")]
-        public void CheckLargestCommonSubsequent(string one, string two, bool ignoreCase, string expected)
+        public void CheckLongestCommonSubsequent(string one, string two, bool ignoreCase, string expected)
         {
-            var actual = one.GetLargestCommonSubsequence(two, ignoreCase);
+            var actual = one.GetLongestCommonSubsequence(two, ignoreCase);
             
             Assert.Equal(expected, actual);
         }
         
         [Fact]
-        public void ReturnNullOnNullWhen_WhenCallingGetLargestCommonSubsequent()
+        public void ReturnNullOnNullWhen_WhenCallingGetLongestCommonSubsequent()
         {
-            Assert.Null("string".GetLargestCommonSubsequence(null));
+            Assert.Null("string".GetLongestCommonSubsequence(null));
         }
 
         [Fact]
-        public void ShouldReturnNull_WhenNullValueForLargestCommonSubsequence()
+        public void ShouldReturnNull_WhenNullValueForLongestCommonSubsequence()
         {
-            Assert.Null("test".GetLargestCommonSubsequence(null));
-            Assert.Null(((string)null).GetLargestCommonSubsequence("null"));
+            Assert.Null("test".GetLongestCommonSubsequence(null));
+            Assert.Null(((string)null).GetLongestCommonSubsequence("null"));
         }
 
         [Theory]
@@ -66,18 +66,18 @@ namespace LinkDotNet.StringOperations.UnitTests
         [Theory]
         [InlineData("ThatIsAWord", "Word", false, "Word")]
         [InlineData("WordLonger", "LongerWord", false, "Longer")]
-        public void CheckLargestSubstring(string one, string two, bool ignoreCase, string expectedSubstring)
+        public void CheckLongestSubstring(string one, string two, bool ignoreCase, string expectedSubstring)
         {
-            var largestCommonSubstring = one.GetLargestCommonSubstring(two, ignoreCase);
+            var longestCommonSubstring = one.GetLongestCommonSubstring(two, ignoreCase);
             
-            Assert.Equal(expectedSubstring, largestCommonSubstring);
+            Assert.Equal(expectedSubstring, longestCommonSubstring);
         }
         
         [Fact]
-        public void ShouldReturnNull_WhenNullValueForLargestCommonSubstring()
+        public void ShouldReturnNull_WhenNullValueForLongestCommonSubstring()
         {
-            Assert.Null("test".GetLargestCommonSubstring(null));
-            Assert.Null(((string)null).GetLargestCommonSubstring("null"));
+            Assert.Null("test".GetLongestCommonSubstring(null));
+            Assert.Null(((string)null).GetLongestCommonSubstring("null"));
         }
     }
 }
