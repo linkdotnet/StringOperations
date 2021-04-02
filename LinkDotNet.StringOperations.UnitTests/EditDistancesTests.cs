@@ -79,5 +79,25 @@ namespace LinkDotNet.StringOperations.UnitTests
             Assert.Null("test".GetLongestCommonSubstring(null));
             Assert.Null(((string)null).GetLongestCommonSubstring("null"));
         }
+
+        [Theory]
+        [InlineData("Hallo", "Hello", false, 1)]
+        [InlineData("a", "abc", false, 0)]
+        [InlineData("abc", "a", false, 2)]
+        [InlineData("ABC", "abc", true, 0)]
+        [InlineData("ABC", "abc", false, 3)]
+        public void ShouldCalculateHammingDistance(string one, string two, bool ignoreCase, int expectedCost)
+        {
+            var actualCost = one.GetHammingDistance(two, ignoreCase);
+            
+            Assert.Equal(expectedCost, actualCost);
+        }
+        
+        [Fact]
+        public void ShouldThrow_WhenNullValueForHammingDistance()
+        {
+            Assert.Throws<ArgumentNullException>(() => "test".GetHammingDistance(null));
+            Assert.Throws<ArgumentNullException>(() => ((string) null).GetHammingDistance("Test"));
+        }
     }
 }

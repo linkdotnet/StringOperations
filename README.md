@@ -7,7 +7,8 @@ The implementations are not optimized for performance.
 ### Edit-Distances
  * Longest Common Subsequent
  * Longest Common Substring
- * Levensthein Distance
+ * Levenshtein Distance
+ * Hamming Distance
 
 ### Search
  * Knuth-Morris-Pratt
