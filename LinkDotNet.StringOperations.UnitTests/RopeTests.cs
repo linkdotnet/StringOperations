@@ -1,3 +1,4 @@
+using System;
 using LinkDotNet.StringOperations.DataStructure;
 using Xunit;
 
@@ -59,6 +60,40 @@ namespace LinkDotNet.StringOperations.UnitTests
             var index = rope[3];
             
             Assert.Equal('3', index);
+        }
+
+        [Theory]
+        [InlineData("HelloWorld", 4, "Hello", "World")]
+        [InlineData("HelloWorld", 5, "HelloW", "orld")]
+        [InlineData("HelloWorld", 6, "HelloWo", "rld")]
+        [InlineData("0123456789", 2, "012", "3456789")]
+        [InlineData("0123456789", 8, "012345678", "9")]
+        [InlineData("0123456789", 0, "0", "123456789")]
+        public void ShouldSplitRope(string word, int indexToSplit, string expectedLeftSide, string expectedRightSide)
+        {
+            var rope = Rope.Create(word);
+
+            var splitPair = rope.Split(indexToSplit);
+
+            Assert.Equal(expectedLeftSide, splitPair.Item1.ToString());
+            Assert.Equal(expectedRightSide, splitPair.Item2.ToString());
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenNegativeIndex()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => Rope.Create("a").Split(-1));
+        }
+
+        [Fact]
+        public void ShouldReturnLeftPartWhenCompleteLength()
+        {
+            var rope = Rope.Create("01234567");
+
+            var pair = rope.Split(7);
+            
+            Assert.Equal("01234567", pair.Item1.ToString());
+            Assert.Null(pair.Item2);
         }
     }
 }
