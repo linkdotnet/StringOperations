@@ -115,5 +115,24 @@ namespace LinkDotNet.StringOperations.UnitTests
             Assert.Equal("HelloWo", split.Item1.ToString());
             Assert.Equal("rld", split.Item2.ToString());
         }
+
+        [Fact]
+        public void ShouldDelete()
+        {
+            var rope = Rope.Create("0123456789");
+            
+            var newRope = rope.Delete(3, 3);
+            
+            Assert.Equal("0126789", newRope.ToString());
+        }
+        
+        [Fact]
+        public void ShouldHavePositiveIndexAndLength()
+        {
+            var rope = Rope.Create("1");
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => rope.Delete(-1, 2));
+            Assert.Throws<ArgumentOutOfRangeException>(() => rope.Delete(1, 0));
+        }
     }
 }

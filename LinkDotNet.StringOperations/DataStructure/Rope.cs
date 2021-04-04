@@ -63,6 +63,26 @@ namespace LinkDotNet.StringOperations.DataStructure
             return pair.Item2 != null ? left + pair.Item2 : left;
         }
 
+        public Rope Delete(int startIndex, int length)
+        {
+            if (startIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(startIndex), "Starting index can^t be negative");
+            }
+
+            if (length <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length), "Length has to be bigger 0");
+            }
+            
+            CheckRecalculation();
+
+            var beforeStartIndex = Split(startIndex - 1).Item1;
+            var afterStartPlusLength = Split(startIndex + length - 1).Item2;
+
+            return beforeStartIndex + afterStartPlusLength;
+        }
+
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
