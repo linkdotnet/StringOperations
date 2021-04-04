@@ -95,5 +95,16 @@ namespace LinkDotNet.StringOperations.UnitTests
             Assert.Equal("01234567", pair.Item1.ToString());
             Assert.Null(pair.Item2);
         }
+
+        [Fact]
+        public void ShouldInsertRope()
+        {
+            var rope1 = Rope.Create("Hello World");
+            var rope2 = Rope.Create(" dear");
+
+            var newRope = rope1.Insert(rope2, 4);
+            
+            Assert.Equal("Hello dear World", newRope.ToString());
+        }
     }
 }

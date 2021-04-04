@@ -54,6 +54,13 @@ namespace LinkDotNet.StringOperations.DataStructure
             }
         }
 
+        public Rope Insert(Rope other, int index)
+        {
+            var pair = Split(index);
+            var left = pair.Item1 + other;
+            return pair.Item2 != null ? left + pair.Item2 : left;
+        }
+
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
