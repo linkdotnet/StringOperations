@@ -106,5 +106,14 @@ namespace LinkDotNet.StringOperations.UnitTests
             
             Assert.Equal("Hello dear World", newRope.ToString());
         }
+
+        [Fact]
+        public void ShouldSplitAfterConcat()
+        {
+            var split = (Rope.Create("Hello") + "World").Split(6);
+            
+            Assert.Equal("HelloWo", split.Item1.ToString());
+            Assert.Equal("rld", split.Item2.ToString());
+        }
     }
 }

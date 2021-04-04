@@ -21,6 +21,8 @@ namespace LinkDotNet.StringOperations.DataStructure
             {
                 throw new ArgumentOutOfRangeException(nameof(index), "Index can't be negative");
             }
+
+            CheckRecalculation();
             
             return SplitRope(this, index);
             
@@ -146,8 +148,7 @@ namespace LinkDotNet.StringOperations.DataStructure
         {
             if (_hasToRecalculateWeights)
             {
-                CalculateAndSetWeight();
-                _hasToRecalculateWeights = false;
+                CheckRecalculation();
             }
             
             return GetIndexInternal(this, index);
@@ -180,6 +181,15 @@ namespace LinkDotNet.StringOperations.DataStructure
                 }
 
                 return node._left != null ? GetWeightInternal(node._left) : node._fragment.Length;
+            }
+        }
+
+        private void CheckRecalculation()
+        {
+            if (_hasToRecalculateWeights)
+            {
+                CalculateAndSetWeight();
+                _hasToRecalculateWeights = false;
             }
         }
     } 
