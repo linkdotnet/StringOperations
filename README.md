@@ -1,4 +1,5 @@
 # String Operations for C#
+[![.NET Build & Test](https://github.com/linkdotnet/StringOperations/actions/workflows/dotnet.yml/badge.svg)](https://github.com/linkdotnet/StringOperations/actions/workflows/dotnet.yml)
 
 This library implements some basic string algorithm.
 The implementations are not optimized for performance.

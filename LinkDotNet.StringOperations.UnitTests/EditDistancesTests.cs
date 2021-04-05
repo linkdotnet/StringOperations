@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using LinkDotNet.StringOperations.EditDistance;
-using NuGet.Frameworks;
 using Xunit;
 
 namespace LinkDotNet.StringOperations.UnitTests
