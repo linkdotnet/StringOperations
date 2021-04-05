@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using LinkDotNet.StringOperations.EditDistance;
+using NuGet.Frameworks;
 using Xunit;
 
 namespace LinkDotNet.StringOperations.UnitTests
@@ -98,6 +100,52 @@ namespace LinkDotNet.StringOperations.UnitTests
         {
             Assert.Throws<ArgumentNullException>(() => "test".GetHammingDistance(null));
             Assert.Throws<ArgumentNullException>(() => ((string) null).GetHammingDistance("Test"));
+        }
+
+        [Fact]
+        public void ShouldGetClosestWords()
+        {
+            var actual = "Hallo".GetClosestWords(2, false, "Hallo", "Auto", "Something else", "Haribo");
+            
+            Assert.NotNull(actual);
+            var collection = actual.ToArray();
+            Assert.NotEmpty(collection);
+            Assert.Equal(2, collection.Length);
+            Assert.Equal("Hallo", collection[0]);
+            Assert.Equal("Haribo", collection[1]);
+        }
+
+        [Fact]
+        public void ShouldReturnEmptyArrayWhenNoInput()
+        {
+            var actual = ((string) null).GetClosestWords(1, false, "H");
+            
+            Assert.Empty(actual);
+        }
+
+        [Fact]
+        public void ShouldReturnEmptyArrayWhenWordsEmpty()
+        {
+            var actual = "Test".GetClosestWords(1, false);
+            
+            Assert.Empty(actual);
+        }
+        
+        [Fact]
+        public void ShouldCheckIfWordIsNull()
+        {
+            var actual = "Hallo".GetClosestWords(2, false, "Hallo", null).ToArray();
+            
+            Assert.Single(actual);
+            Assert.Equal("Hallo", actual[0]);
+        }
+
+        [Fact]
+        public void ShouldGetClosestWord()
+        {
+            var actual = "Hallo".GetClosestWord(false, "Hello", "Helbo");
+
+            Assert.Equal("Hello", actual);
         }
     }
 }

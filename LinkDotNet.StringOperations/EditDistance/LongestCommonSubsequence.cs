@@ -1,9 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LinkDotNet.StringOperations.EditDistance
 {
     public static partial class EditDistances
     {
+        public static string GetClosestWord(this string input, bool ignoreCase, params string[] words) =>
+            input.GetClosestWords(1, ignoreCase, words).FirstOrDefault();
+        
+        public static IEnumerable<string> GetClosestWords(this string input, int count, bool ignoreCase,
+            params string[] words)
+        {
+            if (input == null)
+            {
+                return Array.Empty<string>();
+            }
+
+            if (words == null || !words.Any())
+            {
+                return Array.Empty<string>();
+            }
+
+            var wordToSimilarity = new Dictionary<string, int>();
+            foreach (var word in words.Distinct().Where(w => w != null))
+            {
+                wordToSimilarity[word] = word.GetLongestCommonSubsequence(input, ignoreCase).Length;
+            }
+            
+            var sortedWords = wordToSimilarity.ToList();
+            sortedWords.Sort((a, b) => b.Value.CompareTo(a.Value));
+
+            return sortedWords.Select(s => s.Key).Take(count);
+        }
         public static string GetLongestCommonSubsequence(this string one, string two, bool ignoreCase = false)
         {
             if (one == null || two == null)
