@@ -2,130 +2,129 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LinkDotNet.StringOperations.DataStructure
+namespace LinkDotNet.StringOperations.DataStructure;
+
+public class Trie
 {
-    public class Trie
+    public IDictionary<char, Trie> Children { get; set; } = new Dictionary<char, Trie>();
+    private bool _isLeaf;
+    private readonly bool _ignoreCase;
+
+    public Trie() : this(false)
     {
-        public IDictionary<char, Trie> Children { get; set; } = new Dictionary<char, Trie>();
-        private bool _isLeaf;
-        private readonly bool _ignoreCase;
+    }
 
-        public Trie() : this(false)
-        {
-        }
+    public Trie(bool ignoreCase)
+    {
+        _ignoreCase = ignoreCase;
+    }
 
-        public Trie(bool ignoreCase)
+    public void Add(ReadOnlySpan<char> word)
+    {
+        var current = Children;
+        for (var i = 0; i < word.Length; i++)
         {
-            _ignoreCase = ignoreCase;
-        }
-        
-        public void Add(ReadOnlySpan<char> word)
-        {
-            var current = Children;
-            for (var i = 0; i < word.Length; i++)
+            var currentCharacter = _ignoreCase ? char.ToUpperInvariant(word[i]) : word[i];
+
+            var node = CreateOrGetNode(currentCharacter, current);
+            current = node.Children;
+
+            if (i == word.Length - 1)
             {
-                var currentCharacter = _ignoreCase ? char.ToUpperInvariant(word[i]) : word[i];
-                
-                var node = CreateOrGetNode(currentCharacter, current);
-                current = node.Children;
+                node._isLeaf = true;
+            }
+        }
+    }
 
-                if (i == word.Length - 1)
+    public bool Find(ReadOnlySpan<char> word)
+    {
+        if (word.IsEmpty)
+        {
+            return false;
+        }
+
+        var node = FindNode(word);
+
+        return node != null && node._isLeaf;
+    }
+
+    public bool StartsWith(ReadOnlySpan<char> word)
+    {
+        if (word.IsEmpty)
+        {
+            return false;
+        }
+
+        return FindNode(word) != null;
+    }
+
+    public IEnumerable<string> GetWordsWithPrefix(string prefix)
+    {
+        var node = FindNode(prefix);
+        if (node == null)
+        {
+            yield break;
+        }
+
+        foreach (var word in Collect(node, prefix.ToList()))
+        {
+            yield return word;
+        }
+
+        static IEnumerable<string> Collect(Trie node, List<char> prefix)
+        {
+            if (node.Children.Count == 0)
+            {
+                yield return new string(prefix.ToArray());
+            }
+
+            foreach (var child in node.Children)
+            {
+                prefix.Add(child.Key);
+                foreach (var t in Collect(child.Value, prefix))
                 {
-                    node._isLeaf = true;
+                    yield return t;
                 }
+                prefix.RemoveAt(prefix.Count - 1);
             }
         }
+    }
 
-        public bool Find(ReadOnlySpan<char> word)
+    private static Trie CreateOrGetNode(char currentCharacter, IDictionary<char, Trie> children)
+    {
+        Trie Trie;
+        if (children.ContainsKey(currentCharacter))
         {
-            if (word.IsEmpty)
-            {
-                return false;
-            }
-            
-            var node = FindNode(word);
-
-            return node != null && node._isLeaf;
+            Trie = children[currentCharacter];
+        }
+        else
+        {
+            Trie = new Trie();
+            children.Add(currentCharacter, Trie);
         }
 
-        public bool StartsWith(ReadOnlySpan<char> word)
+        return Trie;
+    }
+
+    private Trie FindNode(ReadOnlySpan<char> word)
+    {
+        var children = Children;
+        Trie currentTrie = null;
+
+        foreach (var character in word)
         {
-            if (word.IsEmpty)
-            {
-                return false;
-            }
-
-            return FindNode(word) != null;
-        }
-
-        public IEnumerable<string> GetWordsWithPrefix(string prefix)
-        {
-            var node = FindNode(prefix);
-            if (node == null)
-            {
-                yield break;
-            }
-
-            foreach (var word in Collect(node, prefix.ToList()))
-            {
-                yield return word;
-            }
-
-            static IEnumerable<string> Collect(Trie node, List<char> prefix)
-            {
-                if (node.Children.Count == 0)
-                {
-                    yield return new string(prefix.ToArray());
-                }
-
-                foreach (var child in node.Children)
-                {
-                    prefix.Add(child.Key);
-                    foreach (var t in Collect(child.Value, prefix))
-                    {
-                        yield return t;
-                    }
-                    prefix.RemoveAt(prefix.Count - 1);
-                }
-            }
-        }
-
-        private static Trie CreateOrGetNode(char currentCharacter, IDictionary<char, Trie> children)
-        {
-            Trie Trie;
+            var currentCharacter = _ignoreCase ? char.ToUpperInvariant(character) : character;
             if (children.ContainsKey(currentCharacter))
             {
-                Trie = children[currentCharacter];
+                currentTrie = children[currentCharacter];
+                children = currentTrie.Children;
             }
             else
             {
-                Trie = new Trie();
-                children.Add(currentCharacter, Trie);
+                return null;
             }
-
-            return Trie;
         }
 
-        private Trie FindNode(ReadOnlySpan<char> word)
-        {
-            var children = Children;
-            Trie currentTrie = null;
-
-            foreach (var character in word)
-            {
-                var currentCharacter = _ignoreCase ? char.ToUpperInvariant(character) : character;
-                if (children.ContainsKey(currentCharacter))
-                {
-                    currentTrie = children[currentCharacter];
-                    children = currentTrie.Children;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
-            return currentTrie;
-        }
+        return currentTrie;
     }
 }

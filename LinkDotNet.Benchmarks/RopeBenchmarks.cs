@@ -1,12 +1,11 @@
 ﻿using BenchmarkDotNet.Running;
 
-namespace LinkDotNet.Benchmarks
+namespace LinkDotNet.Benchmarks;
+
+internal class RopeBenchmarks
 {
-    internal class RopeBenchmarks
+    internal static void Main()
     {
-        internal static void Main()
-        {
-            BenchmarkRunner.Run(typeof(RopeConcatTests).Assembly);
-        }
+        BenchmarkRunner.Run(typeof(RopeConcatTests).Assembly);
     }
 }
