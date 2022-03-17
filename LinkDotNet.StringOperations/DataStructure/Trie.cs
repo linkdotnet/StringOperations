@@ -6,7 +6,7 @@ namespace LinkDotNet.StringOperations.DataStructure;
 
 public class Trie
 {
-    public IDictionary<char, Trie> Children { get; set; } = new Dictionary<char, Trie>();
+    private IDictionary<char, Trie> Children { get; set; } = new Dictionary<char, Trie>();
     private bool _isLeaf;
     private readonly bool _ignoreCase;
 
@@ -92,18 +92,18 @@ public class Trie
 
     private static Trie CreateOrGetNode(char currentCharacter, IDictionary<char, Trie> children)
     {
-        Trie Trie;
+        Trie trie;
         if (children.ContainsKey(currentCharacter))
         {
-            Trie = children[currentCharacter];
+            trie = children[currentCharacter];
         }
         else
         {
-            Trie = new Trie();
-            children.Add(currentCharacter, Trie);
+            trie = new Trie();
+            children.Add(currentCharacter, trie);
         }
 
-        return Trie;
+        return trie;
     }
 
     private Trie FindNode(ReadOnlySpan<char> word)
