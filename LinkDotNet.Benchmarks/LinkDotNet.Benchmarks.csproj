@@ -13,4 +13,11 @@
       <ProjectReference Include="..\LinkDotNet.StringOperations\LinkDotNet.StringOperations.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="1000Words.txt" />
+      <Content Include="1000Words.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
