@@ -32,7 +32,7 @@ public class Rope
             {
                 if (index == node._weight - 1)
                 {
-                    return new Tuple<Rope, Rope>(node, null); 
+                    return new Tuple<Rope, Rope>(node, null);
                 }
 
                 var item1 = Create(node._fragment.ToCharArray()[..(index+1)]);
@@ -67,7 +67,7 @@ public class Rope
     {
         if (startIndex < 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(startIndex), "Starting index can^t be negative");
+            throw new ArgumentOutOfRangeException(nameof(startIndex), "Starting index can't be negative");
         }
 
         if (length <= 0)

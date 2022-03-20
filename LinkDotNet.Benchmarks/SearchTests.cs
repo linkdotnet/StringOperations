@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using LinkDotNet.StringOperations.Search;
@@ -10,15 +11,22 @@ public class SearchTests
     private const string Word = "dog";
 
     [Benchmark]
-    public void KnuthMorrisPrattContains() => KnuthMorrisPratt.HasPattern(Text, Word);
+    public bool KnuthMorrisPrattContains() => KnuthMorrisPratt.HasPattern(Text, Word);
 
     [Benchmark]
-    public void BoyerMooreContains() => BoyerMoore.FindAll(Text, Word).Any();
+    public bool BoyerMooreContains() => BoyerMoore.HasPattern(Text, Word);
 
     [Benchmark]
-    public void KnuthMorrisPrattPrattFindAll() => KnuthMorrisPratt.FindAll(Text, Word).ToList();
+    public bool ZAlgorithmContains() => ZAlgorithm.HasPattern(Text, Word);
 
     [Benchmark]
-    public void BoyerMooreFindAll() => BoyerMoore.FindAll(Text, Word).ToList();
+    public IList<int> KnuthMorrisPrattPrattFindAll() => KnuthMorrisPratt.FindAll(Text, Word).ToList();
+
+    [Benchmark]
+    public IList<int> BoyerMooreFindAll() => BoyerMoore.FindAll(Text, Word).ToList();
+
+    [Benchmark]
+    public IList<int> ZAlgorithmFindAll() => ZAlgorithm.FindAll(Text, Word).ToList();
+
 
 }

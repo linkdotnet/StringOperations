@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LinkDotNet.StringOperations.Search;
 
 public static class BoyerMoore
 {
     private const int AlphabetSize = 256;
+
+    public static bool HasPattern(string text, string word, bool ignoreCase = false) =>
+            FindAll(text, word, ignoreCase, true).Any();
 
     public static IEnumerable<int> FindAll(string text, string word, bool ignoreCase = false, bool abortOnFirstOccurrence = false)
     {

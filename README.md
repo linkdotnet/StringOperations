@@ -14,6 +14,7 @@ The implementations are not optimized for performance.
 ### Search
  * Knuth-Morris-Pratt
  * Boyer-Moore
+ * Z-Algorithm
 
 ### Data Structure
  * Trie
