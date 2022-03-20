@@ -6,8 +6,6 @@ internal static class Benchmarks
 {
     internal static void Main()
     {
-        // BenchmarkRunner.Run<RopeConcatTests>();
-        BenchmarkRunner.Run<SearchTests>();
-        // BenchmarkRunner.Run<TrieVsHashSet>();
+        BenchmarkSwitcher.FromAssembly(typeof(Benchmarks).Assembly).Run();
     }
 }
