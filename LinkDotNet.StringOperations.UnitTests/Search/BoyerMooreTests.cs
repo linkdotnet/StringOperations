@@ -2,9 +2,9 @@ using System.Linq;
 using LinkDotNet.StringOperations.Search;
 using Xunit;
 
-namespace LinkDotNet.StringOperations.UnitTests;
+namespace LinkDotNet.StringOperations.UnitTests.Search;
 
-public class ZAlgorithmTests
+public class BoyerMooreTests
 {
     [Fact]
     public void ShouldFindAllOccurrences()
@@ -12,7 +12,7 @@ public class ZAlgorithmTests
         const string text = "That is my text with the word text 3 times. That is why text again";
         const string pattern = "Text";
 
-        var occurrences = ZAlgorithm.FindAll(text, pattern, true).ToList();
+        var occurrences = BoyerMoore.FindAll(text, pattern, true).ToList();
 
         Assert.Equal(3, occurrences.Count);
         Assert.Equal(11, occurrences[0]);
@@ -21,12 +21,23 @@ public class ZAlgorithmTests
     }
 
     [Fact]
+    public void DoNotGoOutOfBounds()
+    {
+        const string text = "The quick brown fox jumps over the lazy dog maybe also a cat a sheep and another dog";
+        const string word = "dog";
+
+        var occurrences = BoyerMoore.FindAll(text, word).ToList();
+
+        Assert.Equal(2, occurrences.Count);
+    }
+
+    [Fact]
     public void ShouldAbortOnFirstOccurence()
     {
         const string text = "That is my text with the word text 3 times. That is why text again";
         const string pattern = "Text";
 
-        var occurrences = ZAlgorithm.FindAll(text, pattern, true, true).ToList();
+        var occurrences = BoyerMoore.FindAll(text, pattern, true, true).ToList();
 
         Assert.Single(occurrences);
         Assert.Equal(11, occurrences[0]);
@@ -39,23 +50,15 @@ public class ZAlgorithmTests
     [InlineData("null", "")]
     public void ShouldReturnEmptyOccurrences_WhenGivenNullOrEmpty(string text, string pattern)
     {
-        var occurrences = ZAlgorithm.FindAll(text, pattern);
+        var occurrences = BoyerMoore.FindAll(text, pattern);
 
         Assert.Empty(occurrences);
     }
 
     [Fact]
-    public void ShouldReturnIfOccurrenceInText()
-    {
-        var occurrence = ZAlgorithm.HasPattern("KnuthMorrisPratt", "t");
-
-        Assert.True(occurrence);
-    }
-
-    [Fact]
     public void GivenNoHit_ThenEmptyArray()
     {
-        var occurrences = ZAlgorithm.FindAll("Word", "Text");
+        var occurrences = BoyerMoore.FindAll("Word", "Text");
 
         Assert.Empty(occurrences);
     }
@@ -63,8 +66,8 @@ public class ZAlgorithmTests
     [Fact]
     public void GivenPatternLongerThanText_EmptyArray()
     {
-        var hasHit = ZAlgorithm.HasPattern("t", "longer");
+        var occurrences = BoyerMoore.FindAll("t", "longer").ToList();
 
-        Assert.False(hasHit);
+        Assert.Empty(occurrences);
     }
 }

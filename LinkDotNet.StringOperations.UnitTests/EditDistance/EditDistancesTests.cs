@@ -3,7 +3,7 @@ using System.Linq;
 using LinkDotNet.StringOperations.EditDistance;
 using Xunit;
 
-namespace LinkDotNet.StringOperations.UnitTests;
+namespace LinkDotNet.StringOperations.UnitTests.EditDistance;
 
 public class EditDistancesTests
 {

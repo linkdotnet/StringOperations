@@ -1,7 +1,7 @@
 using LinkDotNet.StringOperations.Compression;
 using Xunit;
 
-namespace LinkDotNet.StringOperations.UnitTests;
+namespace LinkDotNet.StringOperations.UnitTests.Compression;
 
 public class LempelZivWelchTests
 {

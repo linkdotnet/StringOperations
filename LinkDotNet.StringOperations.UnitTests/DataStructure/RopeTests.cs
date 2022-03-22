@@ -2,7 +2,7 @@ using System;
 using LinkDotNet.StringOperations.DataStructure;
 using Xunit;
 
-namespace LinkDotNet.StringOperations.UnitTests;
+namespace LinkDotNet.StringOperations.UnitTests.DataStructure;
 
 public class RopeTests
 {
