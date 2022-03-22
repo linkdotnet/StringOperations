@@ -19,3 +19,6 @@ The implementations are not optimized for performance.
 ### Data Structure
  * Trie
  * Rope
+
+### Compression
+ * Lempel-Ziv-Welch
