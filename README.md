@@ -14,7 +14,6 @@ This library implements some basic string algorithm. The implementations are not
  * Knuth-Morris-Pratt
  * Boyer-Moore
  * Z-Algorithm
- * Robin-Karp
 
 ### Data Structure
  * Trie
